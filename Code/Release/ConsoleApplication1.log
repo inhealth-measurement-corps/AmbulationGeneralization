@@ -1,0 +1,41 @@
+﻿  ConsoleApplication1.cpp
+C:\Users\aelzo\OneDrive\Desktop\Code\dijkstras2.h(10,1): warning C4005:  'V': macro redefinition
+C:\Users\aelzo\OneDrive\Desktop\Code\dijkstras.h(10): message :  see previous definition of 'V'
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(154,23): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(176,26): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(201,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(207,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(220,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(227,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(267,14): warning C4244:  '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(269,17): warning C4244:  '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(352,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(402,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(431,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(459,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(568,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(625,23): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(635,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(639,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(653,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(661,13): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(683,11): warning C4018:  '<=': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(752,23): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(798,23): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(823,25): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(873,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(903,25): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(919,25): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(925,25): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(957,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(959,23): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(964,23): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(966,16): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(972,23): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(984,23): warning C4018:  '<': signed/unsigned mismatch
+  Generating code
+  0 of 1748 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  ConsoleApplication1.vcxproj -> C:\Users\aelzo\OneDrive\Desktop\Code\Release\ConsoleApplication1.exe

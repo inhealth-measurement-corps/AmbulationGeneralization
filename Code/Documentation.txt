@@ -1,0 +1,135 @@
+Documentation Ambulation C++ Code:
+Written by: William Xie
+
+Table of Contents
+
+For Users:
+1. Introduction
+2. Getting Started
+3. Using the Application
+
+For Developers:
+1. About the Application
+2. Building the Application
+3. Known Bugs
+
+______________________________________________________________________________________________________
+
+For Users:
+
+Introduction
+------------------------------------------------------------------------------------------------------
+Patient ambulation is beneficial for recovery. Thus it is important for medical caregivers 
+to record patient ambulation. The automation of this recording is made possible with a sensor and 
+badge system in which patients wear a badge during ambulation that is detected by sensors installed
+throughout the ward. This program is used to take raw data recorded from the sensor and badge system
+and calculate ambulation results including distance traveled, time taken, and average speed. 
+
+
+Getting Started
+------------------------------------------------------------------------------------------------------
+Attached is the code required to build the ambulation calculation application. Once built, it is 
+simple to use. Although the ultimate goal is total automation of the system, a specific file must be
+updated daily. Otherwise, the entire ambulation analysis process should be autonomous.
+
+
+Using the Application
+------------------------------------------------------------------------------------------------------
+The application analyzes the raw data based on a file called "IData.csv". It must be updated manually
+in the following format:
+
+Patient Number,Badge ID#,Start Year-Date-Day Time,N/A</br>
+(The N/A</br> segment can be replaced by an end date for a time range)
+
+Example:
+12,307484,2017-08-31 09:00:00,N/A</br>
+23,307632,2017-09-03 01:00:00,N/A</br>
+39,307486,2017-09-13 16:00:00,N/A</br>
+
+The first line above tells the code to call the patient who used badge 307484 from the 
+start date of August 31st 2017, patient number 12, and calculates all ambulations that were made
+from that date to the current date (or up until an end date if specified). 
+
+Example with End Date:
+1,307484,2017-08-31 09:00:00,2017-09-31 09:00:00
+
+Note: Currently the time does not affect analysis so all the data from the specified dates are analyzed.
+
+Therefore the IData.csv file must be updated daily such that the active badges are specified and the 
+date is changed to the current date. 
+
+Once built, the application is setup to run automatically on the INBT server. However, it can also be
+run manually* if it is executed (just double click). The output is called "live.csv"**. To push that data
+to the database manually, you must also run the batch script (again double clicking is fine). 
+
+Caution: 
+By default the directory or folder that is analyzed is called "Output" which is already setup so please
+don't change its name, displace any required files on the server, or disarrange the format of the IData
+file because that will distrupt the code and automatic analysis. 
+
+* How to Run the Application Manually
+Maybe you're running the code for testing or calculating old data. Here's how to use the application manually:
+
+Build the code for "Release": In the same directory as the completed ConsoleApplication1.exe
+(application) file, ensure you have the "Output" folder as a subdirectory. It should contain additional 
+subdirectories named the Badge number (i.e. 307484). These folders contain the raw data to be analyzed.
+Lastly, ensure you have the IData.csv file in the same directory. The IData file should contain the 
+badge to be analyzed (which should also be the name of a subdirectory containing that badge's raw data) 
+and it should contain a start date prior to the raw data dates. 
+
+For example if you are to analyze badge "307888" that had data from 2017 to 2018, here's how you format an IData.csv:
+1,307888,2017-01-01 00:00:00,N/A</br> 
+
+* About live.csv 
+The output file called live.csv contains the analyzed result. 
+Each line corresponds to an ambulation:
+PatientMRN#,Room#,Year-Month-Date StartTime,Time(s),Distance(ft),AverageSpeed(mph),TotalAmbulation,CurrentAmbulation#,
+GoalPlaceholder,GoalPlaceholder,EndYear-EndMonth-EndDay EndTime
+
+______________________________________________________________________________________________________
+
+For Developers:
+
+About the Application
+------------------------------------------------------------------------------------------------------
+In this .zip you will find a folder required to build the Ambulation application. 
+The entirety of the input/output and calculation code is written in C++. The recommended
+environment to build the application is Visual Studio 2017 for Windows. 
+Note: Database communication code exists as batch and python script available on the INBT VM.
+
+
+Building the Application
+------------------------------------------------------------------------------------------------------
+Attached are the project files which should have the correct settings to link and build everything 
+via Visual Studio 2017. Ensure the build is under "Release" mode. Packages you should have installed
+include: Visual Studio's Desktop development workload and Universal Windows Platform development workload.
+
+If there are any issues you can contact me. 
+
+
+Known Bugs
+------------------------------------------------------------------------------------------------------
+With regards to the calculation of ambulation, there is still room for improvement that I am still
+working on. A few notable goals are: making decisions related to patient skipping sensors, improving 
+accuracy of trajectory prediction, and determining validity of segments with long durations. 
+
+Pushing to the database automatically is done via a batch script and Window's Task Schduler. 
+There may be better alternatives to Task Scheduler. 
+
+There exists a small bug when the database loses the live data (data calculated from the current date) 
+for about a minute and regains everything the next minute. This is likely due to the batch script and
+Task Scheduler. 
+
+
+System and Software Requirements
+------------------------------------------------------------------------------------------------------
+Windows 8, 10
+Visual Studio 2017
+Visual C++ Packages (UWP development and Desktop development with C++ workloads)
+
+------------------------------------------------------------------------------------------------------
+Have any questions?
+
+Contact me :)
+William Xie
+wxie8@jhu.edu

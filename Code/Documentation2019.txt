@@ -1,0 +1,54 @@
+Documentation Summer 2019
+Updated to be used with Visual studio 2019.
+Build in release mode.
+kept input using IData file from old code. See the previous documentation.
+See Floor9.txt and Floor10.txt to see how to input floor.
+First is hallway senors connections and next to them is the distance between them. Include both
+01-04 and 04-01. after all hallway sensors are done it starts with room sensors. These should be fomratted
+same way already done. R followed by room number. Make sure this is the first thing to start the room
+sensor block. next column is that room sensorID. Third column is the hallway sensor right outside the room,
+or the closest ones if it can't be determined through looing at map which one should always be triggered.
+Floor9.txt is missing some rooms because they are missing from map.
+
+Code works by processing the data as much as possible before passing it into sensorcheck to determine
+missingsensors of that ambulation.
+
+
+Assumptions:
+Valid Input
+Ending Sensor is never missed. Last sensor in every path should always be a room sensor.
+Shortest path is always calculated.
+Ambulation should not take more than 60 minutes
+Re-exit of room should be within 60 seconds.
+repeating pattern of sensors is assumed to be walking back and forth between them.
+
+Things to be worked on/Issues/Limitations:
+
+Some Ambulations come out longer than they should be because of the way the input is processed.
+The other floor sensors are deleted but if they are in between two sets of ambulations on the right floor
+those get merged into one longer ambulation instead of staying two separate ones.
+
+Need to find a solution as to what to do with room sensors present in a possible ambulation that 
+aren't the patient's room. Right now that whole ambulation is just ignored. This also affects longer/
+incorrect ambulations.
+
+Instead of deleting everything, need to change it so that the information is used or relayed as out
+of room information.
+
+
+Maybe better functionality of determination of ending of an ambulation.
+
+Stuff to know:
+Does not consider two sensors or less as ambulation.
+Calculates time and path and distance starting from first hallway sensor because info not available from
+room to hallway.
+If you make missing_sensor_check too large it might find a path that does not exist.
+Outputs shortestpath. Calculates all paths tho so if you ever wanted longest path for some reason can
+have that outputted instead.
+0  for distance and 0 for speed indicates a strat of another ambulation.
+Same limitation as previous. Shortest path so sensors by windows are pretty much cut out.
+Added:
+erases any ambulation that does not end with patient room. older version of code does not do this.
+
+
+

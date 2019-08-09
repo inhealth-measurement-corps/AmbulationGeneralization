@@ -1,0 +1,271 @@
+﻿  ConsoleApplication1.cpp
+C:\Users\aelzo\OneDrive\Desktop\Code\dijkstras2.h(10,1): warning C4005:  'V': macro redefinition
+C:\Users\aelzo\OneDrive\Desktop\Code\dijkstras.h(10): message :  see previous definition of 'V'
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(950,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(975,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(991,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1219,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1314,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1316,16): warning C4244:  'initializing': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1316,16): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1316,16): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1316,16): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1316,16): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1316,40): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1358,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1389,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1526,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1528,16): warning C4244:  'initializing': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1528,16): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1528,16): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1528,16): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1528,16): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1528,40): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1533,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1710,50): warning C4244:  'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1710,35): warning C4244:  'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1713,48): warning C4244:  'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1713,33): warning C4244:  'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1722,51): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1722,51): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1722,51): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1722,51): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1722,51): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1725,42): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1725,42): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1725,42): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1725,42): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1725,42): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,57): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,57): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,57): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,57): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,57): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,42): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,42): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,42): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,42): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1728,42): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1773,53): warning C4244:  '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1779,40): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1779,40): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1779,40): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1779,40): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1779,40): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1781,51): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1781,51): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1781,51): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1781,51): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1781,51): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1784,42): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1784,42): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1784,42): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1784,42): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1784,42): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,57): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,57): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,57): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,57): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,57): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,42): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,42): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,42): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,42): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1787,42): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1836,43): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1836,43): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1836,43): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1836,43): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1836,43): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1894,49): warning C4244:  'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1894,35): warning C4244:  'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1895,47): warning C4244:  'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1895,33): warning C4244:  'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,59): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,59): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,59): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,59): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,59): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,44): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,44): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,44): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,44): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1957,44): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,57): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,57): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,57): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,57): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,57): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,42): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,42): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,42): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,42): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1958,42): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,62): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,62): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,62): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,62): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,62): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,47): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,47): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,47): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,47): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1968,47): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,56): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,56): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,56): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,56): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,56): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,41): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,41): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,41): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,41): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2002,41): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2005,50): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2005,50): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2005,50): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2005,50): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2005,50): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2008,41): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2008,41): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2008,41): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2008,41): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2008,41): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2011,52): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2011,52): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2011,52): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2011,52): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2011,52): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2014,43): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2014,43): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2014,43): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2014,43): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2014,43): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2051,52): warning C4244:  '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,59): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,59): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,59): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,59): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,59): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,44): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,44): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,44): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,44): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2065,44): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,57): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,57): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,57): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,57): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,57): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,42): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,42): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,42): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,42): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2066,42): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,62): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,62): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,62): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,62): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,62): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,47): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,47): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,47): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,47): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2076,47): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,56): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,56): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,56): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,56): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,56): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,41): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,41): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,41): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,41): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2088,41): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2091,50): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2091,50): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2091,50): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2091,50): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2091,50): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2094,41): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2094,41): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2094,41): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2094,41): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2094,41): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2097,52): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2097,52): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2097,52): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2097,52): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2097,52): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2100,43): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2100,43): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2100,43): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2100,43): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2100,43): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2137,52): warning C4244:  '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2224,28): warning C4244:  '=': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2224,28): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2224,28): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2224,28): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2224,28): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2228,28): warning C4244:  '=': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2228,28): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2228,28): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2228,28): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(2228,28): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,56): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,56): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,56): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,56): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,56): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,41): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,41): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,41): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,41): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3409,41): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,41): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,41): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,41): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,41): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,41): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,85): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,85): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,85): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,85): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3410,85): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,61): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,61): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,61): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,61): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,61): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,46): warning C4244:  'argument': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,46): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,46): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,46): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(3417,46): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(4715,23): warning C4244:  '=': conversion from '_Ty' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(4715,23): warning C4244:         with
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(4715,23): warning C4244:         [
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(4715,23): warning C4244:             _Ty=double
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(4715,23): warning C4244:         ]
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(5585,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(5793,27): warning C4244:  '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(773,13): warning C4101:  'temp2': unreferenced local variable
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(773,20): warning C4101:  'temp3': unreferenced local variable
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(1847,56): warning C4101:  'skipped3': unreferenced local variable
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(5998,24): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6020,27): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6065,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6069,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6093,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6097,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6123,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6143,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6145,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6158,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6160,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6173,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6175,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6188,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\aelzo\OneDrive\Desktop\Code\ConsoleApplication1.cpp(6190,22): warning C4018:  '<': signed/unsigned mismatch
+  ConsoleApplication1.vcxproj -> C:\Users\aelzo\OneDrive\Desktop\Code\Debug\ConsoleApplication1.exe
