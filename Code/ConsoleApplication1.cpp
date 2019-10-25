@@ -44,10 +44,12 @@ int counter = 0; //used in missingsensorpresent function.
 vector<double> shortestpath; //used in missingsensorpresentfunction.
 
 //list of variables the can be chenged in code:
-string floorname = "Floor9.txt";
+string floorname = "Floor10.txt";
 int length = 6; //how many sensors constitutes a path
 int ambulationtime = 3601; //how long an ambulation should be. seconds
 int rexit = 60; //if doesn't exit room after 60 seconds mark as new ambulation.
+int icadj = 11; // In Cheol's adjustment number
+bool adjustTime = false; // Using adjustment
 //Node.h::missing_sensor_check controls amount of missing sensors to check for. Currently checks to depth of the value of this variable + 1;
 
 
@@ -243,6 +245,8 @@ int main() {
 
 		
 	cout << "Scan Complete!" << endl;
+	system("pause");
+
 		
 	
 	//}
@@ -316,7 +320,9 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 	
 	close:
 	input.close();
+
 	return result;
+
 }
 
 //takes in the sensors data file for a given date, the data of the patients from the idata file, and calcualtes how many ambulations occur on the given date for the patient
@@ -561,22 +567,22 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			if (ambulation[ambulationcount].front() != patientroom) {
 				ambulation[ambulationcount].insert(ambulation[ambulationcount].begin(), patientroom);
 			}
-
+			// WX: Commented out 
 			//delete any ambulations that have room sensors in the middle that aren't hallway sensors or patient room.
 			//this needs to be modified to do something with the nonpatient room sensors instead of deleting
 			//This can be changed to output them as OOR?? To account for the room can use same strategy that I use for the patient's room?? Make node of it, set the distances to 0.1, and use it as any other node?
-			for (int j = 0; j < ambulation[ambulationcount].size(); j++) {
-				if (floor.count(ambulation[ambulationcount][j]) == 0 && ambulation[ambulationcount][j] != patientroom) {   //if not hallway sensor or patient room sensor
+			//for (int j = 0; j < ambulation[ambulationcount].size(); j++) {
+			//	if (floor.count(ambulation[ambulationcount][j]) == 0 && ambulation[ambulationcount][j] != patientroom) {   //if not hallway sensor or patient room sensor
 
-				
-					
-					ambulation.erase(ambulationcount);
-					ambulation_starttimes.erase(ambulationcount);
-					ambulation_endtimes.erase(ambulationcount);
+			//	
+			//		
+			//		ambulation.erase(ambulationcount);
+			//		ambulation_starttimes.erase(ambulationcount);
+			//		ambulation_endtimes.erase(ambulationcount);
 
-					break;
-				}
-			}
+			//		break;
+			//	}
+			//}
 
 		next:
 			ambulationcount++;
@@ -603,8 +609,14 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		vector<double> storespeed;
 
 		vector<string> temp;
-		string date = tracklogfile.substr(59, 10);
-		string number = tracklogfile.substr(70, 6);
+		/** This substring depends on the directory of the file */
+		/** WX: Should remove any directories */
+		string delimiter = "\\";
+		if (tracklogfile.find_last_of(delimiter) != string::npos) {
+			tracklogfile = tracklogfile.substr(tracklogfile.find_last_of(delimiter) + 1);
+		}
+		string date = tracklogfile.substr(0, 10); //59,10
+		string number = tracklogfile.substr(11, 6); //70,6
 		
 		//runs sensorcheck on each ambulation remaining and puts result in segment variable to be outputted later.
 
@@ -663,6 +675,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 					int min = ambulation_starttimes[i][ind -1] / 60 % 60;
 					int sec = ambulation_starttimes[i][ind - 1] % 60;
 					string formattime = to_string(hours) + ":" + to_string(min) + ":" + to_string(sec);
+					/** WX: Adjust time */
 					temp.push_back(formattime); //push back the actual time.
 					time =  ambulation_starttimes[i][ind - 1] - ambulation_starttimes[i][0]; //use the cumulative time.
 						temp.push_back(to_string(time)); //current time in seconds. subtracted from starting time.
@@ -725,26 +738,52 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			temp.clear();
 
 			if (!failed) { //meaning successful ambulation
-				temp.push_back(date);
-				temp.push_back(patient);
-				temp.push_back(number);
+				/** WX: Adjusting for first and last segments durations 
+				 * As per In Cheol's manual analysis, we divide the first and last segment distances by the previous or next segment speeds to get a segment duration. */
 
+				// double lastseg = (icadj) / (distancelast / timelast); // we add skip distances to icadj if there is end skip sensors
+				// double firstseg = firstdist - icadj / speedsecond 
+				// finalduration = end - start + first seg - first time + last seg;
+				double firstDist = cumulativedistance[0]; // it's not really a cumulative distance but distances at each point
+				double distanceLast = cumulativedistance[cumulativedistance.size() - 1];
+				double timeLast = ambulation_starttimes[i][ambulation_starttimes[i].size() - 2] - ambulation_starttimes[i][ambulation_starttimes[i].size() - 3];
+				double speedsecond = cumulativedistance[1] /(ambulation_starttimes[i][2] - ambulation_starttimes[i][1]);
+				double lastseg = icadj / (distanceLast / timeLast);
+				double firstseg = (firstDist - icadj) / speedsecond; 
+				double firstTime = ambulation_endtimes[i][0] - ambulation_starttimes[i][0];
+				temp.push_back(patient);
+				// temp.push_back(number); not outputting badge number 
+				temp.push_back(roomID.substr(1)); //patient room 
 				int hours = ambulation_starttimes[i][0] / 3600 % 60;
 				int min = ambulation_starttimes[i][0] / 60 % 60;
 				int sec = ambulation_starttimes[i][0] % 60;
 				string formattime = to_string(hours) + ":" + to_string(min) + ":" + to_string(sec);
-				temp.push_back(formattime);
-
+				//temp.push_back(formattime);
+				if (!adjustTime) {
+					firstseg = 0;
+					firstTime = 0;
+					lastseg = 0;
+				}
+				temp.push_back(date + " " + formattime);
+				temp.push_back(to_string((int)((ambulation_endtimes[i][ambulation_endtimes[i].size() - 1] - ambulation_starttimes[i][0]) + firstseg - firstTime + lastseg))); //adjusted
 				temp.push_back(to_string(sum));
 				double avgspeed = 0;
 				int tottime = 0;
 				tottime = ambulation_endtimes[i][ambulation_endtimes[i].size() - 1] - ambulation_starttimes[i][0];
 
-				avgspeed = sum / tottime;
+				avgspeed = sum / tottime * 0.0113636 * 60;
 
 				temp.push_back(to_string(avgspeed));
-				temp.push_back(to_string((ambulation_endtimes[i][ambulation_endtimes[i].size() - 1] - ambulation_starttimes[i][0])));
-
+				temp.push_back("1");												//Total Ambulation Placeholder
+				temp.push_back(to_string(ambulationcount));							//AmbulationNum (may not be actual ambulation count)
+				temp.push_back("0");												//Goal Placeholder
+				temp.push_back("0");												//Goal Update Time Placeholder
+				int lasttimeIndex = ambulation_endtimes[i].size() - 1;
+				int endhours = ambulation_endtimes[i][lasttimeIndex] / 3600 % 60;
+				int endmin = ambulation_endtimes[i][lasttimeIndex] / 60 % 60;
+				int endsec = ambulation_endtimes[i][lasttimeIndex] % 60;
+				string endformattime = to_string(endhours) + ":" + to_string(endmin) + ":" + to_string(endsec);
+				temp.push_back(date + " " + endformattime);
 				string temp3;
 				temp3.clear();
 				
@@ -753,7 +792,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 					temp3 += to_string(missingsensors[i]);
 					temp3 += " ";
 				}
-				temp.push_back(temp3);
+				//temp.push_back(temp3);
+				temp.push_back(to_string(temp3.size())); // Number of Missed Sensors
 				output.push_back(temp);
 				temp.clear();
 
