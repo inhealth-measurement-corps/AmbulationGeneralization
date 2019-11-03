@@ -350,6 +350,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		tracklog.close();
 
 		map<int, int> roomfinder;
+		map<int, vector<int>> roomsweeper; //will be used to find the rooms not the patient's room and removes it
 		roomfinder.clear();
 
 		
@@ -357,15 +358,17 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		
 		for (int i = 0; i < sensorID.size();i++) {
 			bool found = false;
-			if (floor.count(sensorID[i]) == 0) {
+			if (floor.count(sensorID[i]) == 0) { //if not a floor sensor 
 				for (map<pair<string, int>, vector<int>>::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
 					if (it->first.second == sensorID[i]) {
 						roomfinder[it->first.second]++; //determines which room was detected the most.
+						roomsweeper.insert(pair<int, vector<int> >(it->first.second, vector<int>()));
+						roomsweeper[it->first.second].push_back(i);
 						found = true;
 						break;
 					}
-
 				}
+				
 				////This to be commented out if a better way to deal with this is found.
 				if (!found) {
 					sensorID.erase(sensorID.begin() + i);
@@ -388,6 +391,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 
 		int roomcounter = 0;
+		/** WX: TODO: Must make a roomlist for patient and invalidroomlist for FR, Staff, etc. */
 		for (map<int, int>::iterator it = roomfinder.begin(); it != roomfinder.end(); ++it) {
 			if (it->second > roomcounter) {
 			patientroom = it->first;
@@ -395,6 +399,21 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			}
 		}
 
+		/** WX: Removing invalid room sensors
+		* which should be done after finding the patient's room */
+		for (map<int, vector<int>>::iterator it = roomsweeper.begin(); it != roomsweeper.end(); ++it) {
+			if (it->first != patientroom) {
+				//find this room in sensorID, starttime, and endtime, and remove them
+				for (vector<int>::iterator itt = it->second.begin(); itt != it->second.end(); itt++) {
+					// Need this condition if last room to be removed (p232, 307484, 09/04/2017 but can't do room count) 
+					if (*itt < sensorID.size()) {
+						sensorID.erase(sensorID.begin() + *itt);
+						starttime.erase(starttime.begin() + *itt);
+						endtime.erase(endtime.begin() + *itt);
+					}
+				}
+			}
+		}
 
 		//file sensors sorting so that I can pass it into sensor check
 		map<int,vector<int>> ambulation; //the map to hold the sorted data that will be checked for 6 sensors and missing sensors using sensorcheck.
