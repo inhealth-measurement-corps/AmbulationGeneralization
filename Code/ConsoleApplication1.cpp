@@ -144,6 +144,7 @@ int main() {
 	vector<vector<string>> segData;
 	vector<vector<string>> livedata; //holds the rows of info spit out every time from temp. The thing is it stores all info for all patients given in idata file. then you need to sort it.
 	vector<vector<string>> temp; //each vector here is a row of information for each ambulation on a given day. So 2 ambulations = temp size 2
+	vector<vector<string>> removedData; //removed if not valid room 
 	
 	//goes through the directories and tracklog files
 
@@ -171,7 +172,7 @@ int main() {
 						if (passed) // End date functionality added 
 						{
 							cout << buffer.str() << endl;
-							temp = ambulations(buffer.str(), patientID[i], segData, Floormap, roomlist); 
+							temp = ambulations(buffer.str(), patientID[i], segData, Floormap, roomlist, removedData); 
 							
 							//ambulations: all the ambulations for a given day
 							buffer.str(""); //empties buffer
@@ -198,6 +199,20 @@ int main() {
 	//output files.
 
 	ofstream output;
+
+	output.open("removedData.csv");
+	for (int i = 0; i < removedData.size(); i++) 
+	{
+		if (i > 0 && removedData[i][0] != removedData[i - 1][0]) {
+			output << endl;
+		}
+		for (int j = 0; j < removedData[i].size(); j++) {
+			output << removedData[i][j];
+			output << ",";
+		}
+		output << endl;
+	}
+	output.close();
 	
 	output.open("live.csv");
 	for (int i = 0; i < livedata.size(); i++)
@@ -326,7 +341,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 }
 
 //takes in the sensors data file for a given date, the data of the patients from the idata file, and calcualtes how many ambulations occur on the given date for the patient
-	vector<vector<string>> ambulations(string tracklogfile, string patient, vector<vector<string>>& segments, unordered_map<int, Node> floor, map<pair<string, int>, vector<int>> roomlist) {
+	vector<vector<string>> ambulations(string tracklogfile, string patient, vector<vector<string>>& segments, unordered_map<int, Node> floor, map<pair<string, int>, vector<int>> roomlist, vector<vector<string>>& invalidData) {
 		vector<vector<string>> output;
 		output.clear();
 		ifstream tracklog(tracklogfile);
@@ -336,6 +351,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		vector<int> endtime;
 		int temptime;
 		int patientroom = 0; //holds the sensor of patient's room. 
+		vector<string> removedD; //removed data tracked for statistical purposes
 
 		
 		//turns times to seconds and stores them.
@@ -352,7 +368,14 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		map<int, int> roomfinder;
 		map<int, vector<int>> roomsweeper; //will be used to find the rooms not the patient's room and removes it
 		roomfinder.clear();
-
+		/** This substring depends on the directory of the file */
+		/** WX: Should remove any directories */
+		string delimiter = "\\";
+		if (tracklogfile.find_last_of(delimiter) != string::npos) {
+			tracklogfile = tracklogfile.substr(tracklogfile.find_last_of(delimiter) + 1);
+		}
+		string date = tracklogfile.substr(0, 10); //59,10
+		string number = tracklogfile.substr(11, 6); //70,6
 		
 		//this is to get rid of any sensors that are not for this floor present in the tracklog file. For now till I found a better way to deal with non paitentroom room sensors.
 		
@@ -398,21 +421,31 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			roomcounter = it->second;
 			}
 		}
-
+		vector<int> positionsToRemove; //array of positions to remove from sensorID, starttime, endtime
 		/** WX: Removing invalid room sensors
 		* which should be done after finding the patient's room */
 		for (map<int, vector<int>>::iterator it = roomsweeper.begin(); it != roomsweeper.end(); ++it) {
 			if (it->first != patientroom) {
+				removedD.push_back(patient); //display patient#
+				removedD.push_back(date); // date
+				removedD.push_back(number); // badge number
+				removedD.push_back(to_string(patientroom)); //patient's room			
+				removedD.push_back(to_string(it->first)); // which sensor was removed 
+				removedD.push_back(to_string(it->second.size())); // how frequent it was removed
 				//find this room in sensorID, starttime, and endtime, and remove them
 				for (vector<int>::iterator itt = it->second.begin(); itt != it->second.end(); itt++) {
 					// Need this condition if last room to be removed (p232, 307484, 09/04/2017 but can't do room count) 
 					if (*itt < sensorID.size()) {
-						sensorID.erase(sensorID.begin() + *itt);
-						starttime.erase(starttime.begin() + *itt);
-						endtime.erase(endtime.begin() + *itt);
+						positionsToRemove.push_back(*itt);
 					}
 				}
 			}
+		}
+		sort(positionsToRemove.begin(), positionsToRemove.end());
+		for (int i = positionsToRemove.size() - 1; i > -1; i--) {
+			sensorID.erase(sensorID.begin() + positionsToRemove[i]);
+			starttime.erase(starttime.begin() + positionsToRemove[i]);
+			endtime.erase(endtime.begin() + positionsToRemove[i]);
 		}
 
 		//file sensors sorting so that I can pass it into sensor check
@@ -628,14 +661,6 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		vector<double> storespeed;
 
 		vector<string> temp;
-		/** This substring depends on the directory of the file */
-		/** WX: Should remove any directories */
-		string delimiter = "\\";
-		if (tracklogfile.find_last_of(delimiter) != string::npos) {
-			tracklogfile = tracklogfile.substr(tracklogfile.find_last_of(delimiter) + 1);
-		}
-		string date = tracklogfile.substr(0, 10); //59,10
-		string number = tracklogfile.substr(11, 6); //70,6
 		
 		//runs sensorcheck on each ambulation remaining and puts result in segment variable to be outputted later.
 
@@ -815,6 +840,10 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				temp.push_back(to_string(temp3.size())); // Number of Missed Sensors
 				output.push_back(temp);
 				temp.clear();
+				if (!removedD.empty()) {
+					invalidData.push_back(removedD);
+				}
+				removedD.clear();
 
 			}
 			
