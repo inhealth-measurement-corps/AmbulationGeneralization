@@ -424,12 +424,16 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		vector<int> positionsToRemove; //array of positions to remove from sensorID, starttime, endtime
 		/** WX: Removing invalid room sensors
 		* which should be done after finding the patient's room */
+		bool printPatientnumDateBadge = false; // to display only once
 		for (map<int, vector<int>>::iterator it = roomsweeper.begin(); it != roomsweeper.end(); ++it) {
 			if (it->first != patientroom) {
-				removedD.push_back(patient); //display patient#
-				removedD.push_back(date); // date
-				removedD.push_back(number); // badge number
-				removedD.push_back(to_string(patientroom)); //patient's room			
+				if (!printPatientnumDateBadge) {
+					removedD.push_back(patient); //display patient#
+					removedD.push_back(date); // date
+					removedD.push_back(number); // badge number
+					printPatientnumDateBadge = true;
+				}
+				//removedD.push_back(to_string(patientroom)); //patient's room			
 				removedD.push_back(to_string(it->first)); // which sensor was removed 
 				removedD.push_back(to_string(it->second.size())); // how frequent it was removed
 				//find this room in sensorID, starttime, and endtime, and remove them
