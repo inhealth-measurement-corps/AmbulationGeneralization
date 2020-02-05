@@ -421,6 +421,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			roomcounter = it->second;
 			}
 		}
+
+		
 		vector<int> positionsToRemove; //array of positions to remove from sensorID, starttime, endtime
 		/** WX: Removing invalid room sensors
 		* which should be done after finding the patient's room */
@@ -539,7 +541,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 				//check for re-exit
 				if (sensorID[start] == patientroom) {
-					if ((starttime[start + 1] - starttime[start]) > rexit) {
+					// Will: Also check if the sensor before and the room sensor is > rexit time since we may miss the room sensor on the way back from the last ambulation but it gets detected the next ambulation.
+					if ((starttime[start + 1] - starttime[start]) > rexit || starttime[start] - starttime[start - 1] > rexit) {
 						ambulation[ambulationcount].push_back(sensorID[start]);
 						ambulation_starttimes[ambulationcount].push_back(starttime[start]);
 						ambulation_endtimes[ambulationcount].push_back(endtime[start]);
@@ -596,7 +599,6 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 			} //end of while determing ambulation
 
-			//if 2 or less sensors delete ambulation. 
 			if (ambulation[ambulationcount].size() < 3) {
 				ambulation.erase(ambulationcount);
 				//map<int, pair<int, int>>::iterator it = ambulation_time_frames.find(ambulationcount);
@@ -606,12 +608,20 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				goto next;
 			}
 
-			
+			/** WX: Remove if not valid patient room */
+			for (map<pair<string, int>, vector<int>>::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
+				if (it->first.second == patientroom && it->first.first.front() != 'R') {
+					ambulation.erase(ambulationcount);
+					ambulation_starttimes.erase(ambulationcount);
+					ambulation_endtimes.erase(ambulationcount);
+					goto next;
+				}
+			}
 			//if end room sensor isn't present in the ambulation.
 			if (ambulation[ambulationcount][ambulation[ambulationcount].size() - 1] != patientroom) {
-				ambulation[ambulationcount].push_back(patientroom);
-				ambulation.erase(ambulationcount); //this line and the one other assume that the ending sensor is always preent in the ambulation.
-				goto next;//This assumption is from the files I dealt with. If it's found to not be the case, then comment out these 2 commented lines.
+				//ambulation[ambulationcount].push_back(patientroom);
+				//ambulation.erase(ambulationcount); //this line and the one other assume that the ending sensor is always preent in the ambulation.
+				//goto next;//This assumption is from the files I dealt with. If it's found to not be the case, then comment out these 2 commented lines.
 			}
 
 			//In order to calculate time starting from first hallway sensor.
@@ -692,7 +702,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			}
 			/////////////
 
-			if (path.size() < length) {
+			if (path.size() - 2 < length) { // Will: -2 to account for room sensors 
 				failed = true;
 			}
 
