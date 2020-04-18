@@ -9,6 +9,7 @@
 #include <thread>
 #include <chrono>
 #include <cstdlib>
+#include <stdlib.h>
 #include "CSVRow.h"
 #include "Definements.h"
 #include "Node.h"
@@ -384,7 +385,9 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			if (floor.count(sensorID[i]) == 0) { //if not a floor sensor 
 				for (map<pair<string, int>, vector<int>>::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
 					if (it->first.second == sensorID[i]) {
-						roomfinder[it->first.second]++; //determines which room was detected the most.
+						if (it->first.first.front() == 'R') {
+							roomfinder[it->first.second]++; //determines which room was detected the most.
+						}
 						roomsweeper.insert(pair<int, vector<int> >(it->first.second, vector<int>()));
 						roomsweeper[it->first.second].push_back(i);
 						found = true;
@@ -719,8 +722,9 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			int time = 0; //this is the cumulative time.
 			storespeed.clear();
 			int speedtime = 0;
-			
-			for (int k = 0; k < path.size(); k++) {
+			int lastvalid = 0;
+			int secondlastindex = 0;
+			for (int k = 0; k < path.size() - 1; k++) {
 				bool missed = false;
 
 				temp.push_back(date);
@@ -733,15 +737,15 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 					int min = ambulation_starttimes[i][ind -1] / 60 % 60;
 					int sec = ambulation_starttimes[i][ind - 1] % 60;
 					string formattime = to_string(hours) + ":" + to_string(min) + ":" + to_string(sec);
-					/** WX: Adjust time */
 					temp.push_back(formattime); //push back the actual time.
-					time =  ambulation_starttimes[i][ind - 1] - ambulation_starttimes[i][0]; //use the cumulative time.
-						temp.push_back(to_string(time)); //current time in seconds. subtracted from starting time.
+					time =  ambulation_starttimes[i][ind] - ambulation_starttimes[i][ind-1]; //use the segment time
+						temp.push_back(to_string(time)); //current time in seconds. subtracted from previous time.
 						
 							speedtime = ambulation_starttimes[i][ind - 1] - ambulation_starttimes[i][ind - 2]; // this is the time to use for the segspeed for now.
 						
 						ind++;
-						
+						secondlastindex = lastvalid;
+						lastvalid = k;
 				}
 					
 				else {
@@ -751,15 +755,19 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 					
 				}
 
-				if (k <= cumulativedistance.size() && k > 0) { //double check the = I put here.
-					
-					sum += cumulativedistance[k - 1];
-					temp.push_back(to_string(sum));
-					
+				if (k < cumulativedistance.size() && k >= 0) { //double check the = I put here.
+					if (missed) {
+						temp.push_back("Missed sensor");
+						segments[lastvalid][7] = to_string(atof(segments[lastvalid][7].c_str()) + cumulativedistance[k]);
+					}
+					else {
+						sum += cumulativedistance[k];
+						temp.push_back(to_string(cumulativedistance[k]));
+					}
 
 
 					if (speedtime != 0 && !missed) {
-						double segspeed = cumulativedistance[k] / (double) speedtime;
+						double segspeed = cumulativedistance[k] / (double) time * 0.0113636 * 60;
 						storespeed.push_back(segspeed);
 						temp.push_back(to_string(segspeed));
 					}
@@ -768,10 +776,12 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 						temp.push_back("Segment speed not available using this sensor");
 					}
 					
-				}
+				}	else if (k == cumulativedistance.size()) {
+					temp.push_back(to_string(11));
+					temp.push_back("Segment Speed not available using this sensor");
 
-				else {
-					temp.push_back(to_string(sum));
+				}	else {
+					temp.push_back("N/A");
 					temp.push_back("Segment Speed not available using this sensor");
 				}
 
@@ -789,7 +799,24 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				segments.push_back(temp);
 				temp.clear();
 			}
-			
+			/** WX: -11 segment adjustment 
+			* First segmeent time is the first distance - 11 / (speed of second segment)
+			* Last segment time is the last segment distance + 11 / (speed of second to last segment)
+			*
+			*/
+			segments[0][7] = to_string(atof(segments[0][7].c_str()) - 11);  // -11 segment adjustment
+			double firstSegmentTime = atof(segments[0][7].c_str()) * atof(segments[1][6].c_str()) / atof(segments[1][7].c_str()); // calculate first segment time
+			segments[0][6] = to_string(firstSegmentTime);
+			segments[0][8] = to_string(atof(segments[0][7].c_str()) / atof(segments[0][6].c_str()) * 0.0113636 * 60); // adjust first segment speed
+			double lastSegmentTime = atof(segments[lastvalid][7].c_str()) * atof(segments[secondlastindex][6].c_str()) / atof(segments[secondlastindex][7].c_str());
+			segments[lastvalid][6] = to_string(lastSegmentTime);
+			// Loop through to update segment speeds because times were adjusted
+			for (int i = 0; i < segments.size(); i++) {
+				double updatedSpeed = atof(segments[i][7].c_str()) / atof(segments[i][6].c_str()) * 0.0113636 * 60;
+				if (updatedSpeed > 0) {
+					segments[i][8] = to_string(updatedSpeed);
+				}
+			}
 
 
 
