@@ -142,6 +142,7 @@ int main() {
 
 	//using the path in order to go through the tracklog files
 	stringstream buffer;
+	vector<vector<string>> aggregateSegData; 
 	vector<vector<string>> segData;
 	vector<vector<string>> livedata; //holds the rows of info spit out every time from temp. The thing is it stores all info for all patients given in idata file. then you need to sort it.
 	vector<vector<string>> temp; //each vector here is a row of information for each ambulation on a given day. So 2 ambulations = temp size 2
@@ -174,7 +175,10 @@ int main() {
 						{
 							cout << buffer.str() << endl;
 							temp = ambulations(buffer.str(), patientID[i], segData, Floormap, roomlist, removedData); 
-							
+							for (int j = 0; j < segData.size(); j++) {
+								aggregateSegData.push_back(segData[j]);
+							}
+							segData.clear();
 							//ambulations: all the ambulations for a given day
 							buffer.str(""); //empties buffer
 							for (int i = 0; i < temp.size(); i++)
@@ -235,16 +239,16 @@ int main() {
 	output.close();
 	
 	output.open("segmentAnalysis.csv");
-	for (int i = 0; i < segData.size(); i++)
+	for (int i = 0; i < aggregateSegData.size(); i++)
 	{
-		if (i > 0 && segData[i][0] != segData[i - 1][0]) {
+		if (i > 0 && aggregateSegData[i][0] != aggregateSegData[i - 1][0]) {
 			output << endl;
 		}
 
 
-		for (int j = 0; j < segData[i].size(); j++)
+		for (int j = 0; j < aggregateSegData[i].size(); j++)
 		{
-			output << segData[i][j];
+			output << aggregateSegData[i][j];
 
 			output << ",";
 		
@@ -678,7 +682,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		vector<double> storespeed;
 
 		vector<string> temp;
-		
+		vector<int> pathoffset;
+
 		//runs sensorcheck on each ambulation remaining and puts result in segment variable to be outputted later.
 
 		for (int i = 0; i < ambulationcount; i++) {
@@ -699,7 +704,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 					temp.push_back(to_string(ambulation[i][j]));
 				}
 				temp.push_back("Path could not be completed;A next Sensor was not found"); //either not a path or missing_sensor_check needs to be increased.
-				segments.push_back(temp);
+				//segments.push_back(temp);
 				temp.clear();
 				continue;
 			}
@@ -716,14 +721,28 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				}
 			}
 
-
 			int ind = 1;
 			double sum = 0;
 			int time = 0; //this is the cumulative time.
 			storespeed.clear();
 			int speedtime = 0;
-			int lastvalid = 0;
-			int secondlastindex = 0;
+			int lastvalid = 0; // the index of last valid sensor detected
+			int secondlastindex = 0; // get the second to last valid index to get the second to last segment time (may not necessarily be the one before the last segment in case of skips)
+			int sumoffset = 0; //get the total number of segments
+			int missedsum = 0; // calculate distance skipped in cases when the first segment far from starting point because sensors were skipped
+			if (!failed) {
+				pathoffset.push_back(path.size() - 1);
+			}
+			for (int z = 0; z < pathoffset.size(); z++) {
+				sumoffset += pathoffset[z];
+			} 
+			if (pathoffset.size() > 0) {
+				lastvalid = sumoffset - pathoffset[pathoffset.size() - 1];
+			}
+			else {
+				lastvalid = 0; 
+			}
+			int locallastvalid = lastvalid; // current index segments is on
 			for (int k = 0; k < path.size() - 1; k++) {
 				bool missed = false;
 
@@ -745,7 +764,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 						
 						ind++;
 						secondlastindex = lastvalid;
-						lastvalid = k;
+						lastvalid = k + locallastvalid;
 				}
 					
 				else {
@@ -758,11 +777,19 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				if (k < cumulativedistance.size() && k >= 0) { //double check the = I put here.
 					if (missed) {
 						temp.push_back("Missed sensor");
-						segments[lastvalid][7] = to_string(atof(segments[lastvalid][7].c_str()) + cumulativedistance[k]);
+						missedsum += cumulativedistance[k];
+						if (lastvalid > 0 && segments.size() > 0 && segments.size() > lastvalid) {
+							segments[lastvalid][7] = to_string(atof(segments[lastvalid][7].c_str()) + cumulativedistance[k]);
+						}
 					}
 					else {
 						sum += cumulativedistance[k];
-						temp.push_back(to_string(cumulativedistance[k]));
+						if (secondlastindex == 0 && missedsum > 0) {
+							temp.push_back(to_string(missedsum));
+						}
+						else {
+							temp.push_back(to_string(cumulativedistance[k]));
+						}
 					}
 
 
@@ -794,9 +821,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 				else {
 					temp.push_back("Ambulation");
+					segments.push_back(temp);
 				}
-
-				segments.push_back(temp);
 				temp.clear();
 			}
 			/** WX: -11 segment adjustment 
@@ -804,22 +830,14 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			* Last segment time is the last segment distance + 11 / (speed of second to last segment)
 			*
 			*/
-			segments[0][7] = to_string(atof(segments[0][7].c_str()) - 11);  // -11 segment adjustment
-			double firstSegmentTime = atof(segments[0][7].c_str()) * atof(segments[1][6].c_str()) / atof(segments[1][7].c_str()); // calculate first segment time
-			segments[0][6] = to_string(firstSegmentTime);
-			segments[0][8] = to_string(atof(segments[0][7].c_str()) / atof(segments[0][6].c_str()) * 0.0113636 * 60); // adjust first segment speed
-			double lastSegmentTime = atof(segments[lastvalid][7].c_str()) * atof(segments[secondlastindex][6].c_str()) / atof(segments[secondlastindex][7].c_str());
-			segments[lastvalid][6] = to_string(lastSegmentTime);
-			// Loop through to update segment speeds because times were adjusted
-			for (int i = 0; i < segments.size(); i++) {
-				double updatedSpeed = atof(segments[i][7].c_str()) / atof(segments[i][6].c_str()) * 0.0113636 * 60;
-				if (updatedSpeed > 0) {
-					segments[i][8] = to_string(updatedSpeed);
-				}
+			if (segments.size() > 0) {
+				segments[locallastvalid][7] = to_string(atof(segments[locallastvalid][7].c_str()) - 11);  // -11 segment adjustment
+				double firstSegmentTime = atof(segments[locallastvalid][7].c_str()) * atof(segments[locallastvalid + 1][6].c_str()) / atof(segments[locallastvalid + 1][7].c_str()); // calculate first segment time
+				segments[locallastvalid][6] = to_string(firstSegmentTime);
+				//segments[0][8] = to_string(atof(segments[0][7].c_str()) / atof(segments[0][6].c_str()) * 0.0113636 * 60); // adjust first segment speed
+				double lastSegmentTime = atof(segments[lastvalid][7].c_str()) * atof(segments[secondlastindex][6].c_str()) / atof(segments[secondlastindex][7].c_str());
+				segments[lastvalid][6] = to_string(lastSegmentTime);
 			}
-
-
-
 			temp.clear();
 
 			if (!failed) { //meaning successful ambulation
@@ -891,7 +909,13 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			
 		}
 
-
+		// Loop through to update segment speeds because times were adjusted
+		for (int i = 0; i < segments.size(); i++) {
+			double updatedSpeed = atof(segments[i][7].c_str()) / atof(segments[i][6].c_str()) * 0.0113636 * 60;
+			if (updatedSpeed > 0) {
+				segments[i][8] = to_string(updatedSpeed);
+			}
+		}
 		
 		return output;
 	}
