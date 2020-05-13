@@ -53,6 +53,14 @@ int icadj = 11; // In Cheol's adjustment number
 bool adjustTime = false; // Using adjustment
 //Node.h::missing_sensor_check controls amount of missing sensors to check for. Currently checks to depth of the value of this variable + 1;
 
+// Threshold variable for filtering noise and categorizing segments
+double stopNoise = 0.05;
+double fastNoise = 6;
+
+double slowThres = 0.22;
+double pushThres = 4.06;
+// Probable walk speed is between the stop threshold and push threshold
+
 
 
 
@@ -66,9 +74,9 @@ bool sortcol(const vector<string>& v1,
 int main() {
 	//input and CSVtracklog file stuff
 	string path;
-	cout << "Enter Path/Directory to be analyzed:" << endl;
-	cin >> path;
-
+	//cout << "Enter Path/Directory to be analyzed:" << endl;
+	//cin >> path;
+	path = "Output";
 	//ConnectServer connect;
 	//econnect.insert(1, 10, "2018-11-15 23:45:30", 200, 12, 2, 1, 1, 0, "0", "2018-10-13 11:10:10");
 
@@ -190,15 +198,15 @@ int main() {
 						}
 					}
 				}
-			
-				
+
+
 		}
 		buffer.str(std::string()); //allows you to empty buffer.
 	}
 
 	//output://delete this when doing more than one file
 
-	
+
 	sort(livedata.begin(), livedata.end(), sortcol); //sorts by date
 
 	//output files.
@@ -206,7 +214,7 @@ int main() {
 	ofstream output;
 
 	output.open("removedData.csv");
-	for (int i = 0; i < removedData.size(); i++) 
+	for (int i = 0; i < removedData.size(); i++)
 	{
 		if (i > 0 && removedData[i][0] != removedData[i - 1][0]) {
 			output << endl;
@@ -218,7 +226,7 @@ int main() {
 		output << endl;
 	}
 	output.close();
-	
+
 	output.open("live.csv");
 	for (int i = 0; i < livedata.size(); i++)
 	{
@@ -231,13 +239,13 @@ int main() {
 			output << livedata[i][j];
 
 			output << ",";
-			
+
 		}
 		output << endl;
-		
+
 	}
 	output.close();
-	
+
 	output.open("segmentAnalysis.csv");
 	for (int i = 0; i < aggregateSegData.size(); i++)
 	{
@@ -251,19 +259,165 @@ int main() {
 			output << aggregateSegData[i][j];
 
 			output << ",";
-		
+
 		}
 		output << endl;
 
-		
+
 	}
 	output.close();
 
 
+	vector<vector<string>> ambSegData;
+	vector<string> ambSpeedCalc;
+	bool attachmetaData = false;
 
-		
+	output.open("speedTally.csv");
+	for (int i = 0; i < aggregateSegData.size(); i++)
+	{
+		//if (i > 0 && aggregateSegData[i][0] != aggregateSegData[i - 1][0]) {
+		//	output << endl;
+		//}
+		double speed = 0;
+		if (aggregateSegData[i].size() == 1) {
+			output << "END OF AMBULATION";
+			output << ",";
+			output << endl;
+			if (ambSpeedCalc.size() != 0) {
+				ambSegData.push_back(ambSpeedCalc);
+				ambSpeedCalc.clear();
+			}
+			attachmetaData = true; 
+		}
+		else {
+			speed = atof(aggregateSegData[i][8].c_str());
+			if (attachmetaData && aggregateSegData[i][8] != "Segment speed not available using this sensor") {
+				ambSpeedCalc.push_back(aggregateSegData[i][1].c_str());
+				ambSpeedCalc.push_back(aggregateSegData[i][0].c_str());
+				ambSpeedCalc.push_back(aggregateSegData[i][5].c_str());
+				attachmetaData = false;
+			}
+			if (aggregateSegData[i][8] != "Segment speed not available using this sensor") {
+				ambSpeedCalc.push_back(aggregateSegData[i][8].c_str());
+			}
+		}
+		if (speed > fastNoise) {
+			output << speed;
+			output << ",";
+			output << "fast";
+			output << ",";
+			output << endl;
 
+		}
+		else if (speed < stopNoise && speed > 0) {
+			output << speed;
+			output << ",";
+			output << "stop";
+			output << ",";
+			output << endl;
+
+		}
+		else if (speed > pushThres && speed < fastNoise) {
+			output << speed;
+			output << ",";
+			output << "pushed";
+			output << ",";
+			output << endl;
+
+		}
+		else if (speed < pushThres && speed > slowThres) {
+			output << speed;
+			output << ",";
+			output << "walk";
+			output << ",";
+			output << endl;
+
+		}
+		else if (speed < slowThres && speed > stopNoise) {
+			output << speed;
+			output << ",";
+			output << "slow";
+			output << ",";
+			output << endl;
+
+		}
+
+
+	}
+	output.close();
+
+
+	/** ambSegData contains patient number, date, time, and segment speeds 
+		Use to take average of speeds, and filter out segments outside +/- 1 standard deviation
+		New indices should be: 0 average speed, 1 standard deviation, 2 patient number, 3 date, 4 time, 5 and beyond segment speeds
+		filteredSegData contains filtered segment speeds of ambSegData
+	*/
+	vector<double> calculationVec; 
+	for (int i = 0; i < ambSegData.size(); i++) {
+		double sum = 0;
+		double stdev = 0;
+		// load segment data
+		for (int j = 3; j < ambSegData[i].size(); j++) {
+			calculationVec.push_back(atof(ambSegData[i][j].c_str()));
+		}
+		// compute average and append to start i.e. index 0 of ambSegData
 		
+		for (const auto& elem : calculationVec) {
+			sum += elem;
+		}
+		double mean = sum / calculationVec.size();
+		ambSegData[i].insert(ambSegData[i].begin(), to_string(mean));
+
+		// compute standard deviation and append to index 1 of ambSegData
+		for (const auto& elem : calculationVec) {
+			stdev += pow(elem - mean, 2);
+		}
+		stdev = sqrt(stdev / 10);
+		ambSegData[i].insert(ambSegData[i].begin() + 1, to_string(stdev));
+		calculationVec.clear();
+	}
+	vector<vector<string>> filteredSegData = ambSegData;
+	/** Filter segments out if over or under 1 stdev of average */
+	for (int i = 0; i < filteredSegData.size(); i++) {
+		double upperBound = atof(filteredSegData[i][0].c_str()) + atof(filteredSegData[i][1].c_str());
+		double lowerBound = atof(filteredSegData[i][0].c_str()) - atof(filteredSegData[i][1].c_str());
+
+		for (int j = 5; j < filteredSegData[i].size(); j++) {
+			if (atof(filteredSegData[i][j].c_str()) > upperBound || atof(filteredSegData[i][j].c_str()) < lowerBound) {
+				filteredSegData[i].erase(filteredSegData[i].begin() + j);
+			}
+		}
+	}
+	/** TODO: Recompute average and stdev */
+	output.open("segSpeedData.csv");
+	for (int i = 0; i < ambSegData.size(); i++) {
+		for (int j = 0; j < ambSegData[i].size(); j++)
+		{
+			output << ambSegData[i][j];
+
+			output << ",";
+
+		}
+		output << endl;
+	}
+
+	output.close();
+
+	output.open("filteredSegSpeedData.csv");
+	for (int i = 0; i < filteredSegData.size(); i++) {
+		for (int j = 0; j < filteredSegData[i].size(); j++)
+		{
+			output << filteredSegData[i][j];
+
+			output << ",";
+
+		}
+		output << endl;
+	}
+
+	
+	output.close();
+
 	cout << "Scan Complete!" << endl;
 	system("pause");
 
@@ -428,7 +582,6 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			roomcounter = it->second;
 			}
 		}
-
 		
 		vector<int> positionsToRemove; //array of positions to remove from sensorID, starttime, endtime
 		/** WX: Removing invalid room sensors
@@ -905,8 +1058,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				removedD.clear();
 
 			}
-			
-			
+
 		}
 
 		// Loop through to update segment speeds because times were adjusted
@@ -916,7 +1068,10 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				segments[i][8] = to_string(updatedSpeed);
 			}
 		}
-		
+		// Place holder to mark end of ambulation
+		temp.push_back("END OF AMBULATION");
+		segments.push_back(temp);
+		temp.clear();
 		return output;
 	}
 
@@ -938,7 +1093,9 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			//path.push_back(sensorID[i]);
 			return;
 		}
-
+		while (sensorID[i] == 0 && i < sensorID.size()) { // WX: weird workaround sensor id being 0
+			i++;
+		}
 		unordered_map<int, Node>::iterator it = floor.find(sensorID[i]);
 
 		
