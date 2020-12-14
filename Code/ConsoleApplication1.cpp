@@ -43,6 +43,10 @@ map<int,vector<double>> trackdistance; //used in missingsensorspresent function.
 int counter = 0; //used in missingsensorpresent function.
 vector<double> shortestpath; //used in missingsensorpresentfunction.
 
+//following 2 variables are used for distance categorization in ambulations function.
+//vector<double> positivePatterns (905, 463, 257);
+//map<int,boolean> ambulationPatterns;
+
 //list of variables the can be chenged in code:
 string floorname = "Floor9.txt";
 int length = 6; //how many sensors constitutes a path
@@ -635,14 +639,44 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			if (path.size() < length) {
 				failed = true;
 			}
-
+			//make a new variable
+			//double totalDist = 0;
 			for (int z = 0; z < cumulativedistance.size(); z++) {
 				if (cumulativedistance[z] == 0.1) { //means room sensor distance meant to be thrown. 
 					cumulativedistance.erase(cumulativedistance.begin() + z);
 					z--;
 				}
+				//part of distance categorization NEEDS TESTING
+				// if its not meant to be thrown I add up all the distances to find the total distance of an ambulation
+				/*else {
+					totalDist += cumulativedistance[z];
+				}*/
+				// was not able to check if this would work
 			}
-
+			
+			//part of distance categorization NEEDS TESTING
+			/*
+			//the three distances in PositivePatterns which has 905, 463, 257
+			if(totalDist <= PositivePatterns[2]) { //if it is smaller than all 3 it is given a false boolean
+				ambulationPatterns[ambulationcount] = false;
+			}
+			else if (totalDist <= PositivePatterns[0] && totalDist >= PositivePatterns[1] && (totalDist - 100) <= PositivePatterns[1]) { 
+			// if its bigger then 463 but smaller than 905 its true
+			// i add the third condition so that values closer to 905 such as 800 will not be true
+				ambulationPatterns[ambulationcount] = true;
+			}
+			else if (totalDist <= PositivePatterns[1] && totalDist >= PositivePatterns[2] && (totalDist - 100) <= PositivePatterns[2]) { 
+			//same concept as above, if bigger than 257 and smaller then 463
+				ambulationPatterns[ambulationcount] = true;
+			}
+			else if (totalDist >= PositivePatterns[0]) { // if greater than 905
+				ambulationPatterns[ambulationcount] = true;
+			}
+			else {
+				ambulationPatterns[ambulationcount] = false;
+			}
+			*/
+			
 
 			int ind = 1;
 			double sum = 0;
