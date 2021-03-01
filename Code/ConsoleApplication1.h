@@ -8,11 +8,11 @@
 #include <unordered_set>
 
 
-std::unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list);
+std::unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list);
 
-vector<vector<string>> ambulations(string tracklogfile, string patient, vector<vector<string>>& segments, unordered_map<int, Node> floor, map<pair<string, int>, vector<int>> roomlist);
+vector<vector<string> > ambulations(string tracklogfile, string patient, vector<vector<string> >& segments, unordered_map<int, Node> floor, map<pair<string, int>, vector<int> > roomlist);
 
-void sensorcheck(vector<double>& cumulativedistance, vector<int>& sensors, vector<int>& path, vector<int> sensorID, unordered_map<int, Node> floor, int index, map<pair<string, int>, vector<int>> roomlist);
+void sensorcheck(vector<double>& cumulativedistance, vector<int>& sensors, vector<int>& path, vector<int> sensorID, unordered_map<int, Node> floor, int index, map<pair<string, int>, vector<int> > roomlist);
 
 void missingsensorpresent(Node checking, vector<int>& sensors, vector<int>& path, vector<double>& cumulativedistance, int whichsensor, int z, unordered_map<int, Node> floor, vector<int> visited2);
 
