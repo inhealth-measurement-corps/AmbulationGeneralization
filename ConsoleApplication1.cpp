@@ -20,6 +20,7 @@
 #include <Windows.h> 
 #include <Wininet.h>
 #include <filesystem>
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 #include <tchar.h>
 #include <urlmon.h>
@@ -28,6 +29,8 @@
 #include <utility>
 #include "ConsoleApplication1.h"
 #include <unordered_set>
+
+
 
 
 
@@ -42,6 +45,10 @@ map<int,vector<int>> tracksensors; //used in missingsensorspresent function.
 map<int,vector<double>> trackdistance; //used in missingsensorspresent function.
 int counter = 0; //used in missingsensorpresent function.
 vector<double> shortestpath; //used in missingsensorpresentfunction.
+
+//following 2 variables are used for distance categorization in ambulations function.
+//vector<double> positivePatterns (905, 463, 257);
+//map<int,boolean> ambulationPatterns;
 
 //list of variables the can be chenged in code:
 string floorname = "Floor9.txt";
@@ -548,7 +555,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			//if end room sensor isn't present in the ambulation.
 			if (ambulation[ambulationcount][ambulation[ambulationcount].size() - 1] != patientroom) {
 				ambulation[ambulationcount].push_back(patientroom);
-
+				ambulation.erase(ambulationcount); //this line and the one other assume that the ending sensor is always preent in the ambulation.
+				goto next;//This assumption is from the files I dealt with. If it's found to not be the case, then comment out these 2 commented lines.
 			}
 
 			//In order to calculate time starting from first hallway sensor.
@@ -619,18 +627,59 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 			sensorcheck(cumulativedistance, missingsensors, path, ambulation[i], floor, 0, roomlist); //can use it to account for if 6 sensors were passed and for trajectory. But sensorID needs to be sorted before passing into here. Maybe on the basis of time. Need to determine which paths are worth checking and then call once for each path.
 			
+			///////////////added this condiiton but hasn't been triggered yet. If any problems comment out.
+			if (path[path.size() - 1] == 0) {
+				for (int j = 0; j < ambulation[i].size(); j++) {
+					temp.push_back(to_string(ambulation[i][j]));
+				}
+				temp.push_back("Path could not be completed;A next Sensor was not found"); //either not a path or missing_sensor_check needs to be increased.
+				segments.push_back(temp);
+				temp.clear();
+				continue;
+			}
+			/////////////
 
 			if (path.size() < length) {
 				failed = true;
 			}
-
+			//make a new variable
+			//double totalDist = 0;
 			for (int z = 0; z < cumulativedistance.size(); z++) {
 				if (cumulativedistance[z] == 0.1) { //means room sensor distance meant to be thrown. 
 					cumulativedistance.erase(cumulativedistance.begin() + z);
 					z--;
 				}
+				//part of distance categorization NEEDS TESTING
+				// if its not meant to be thrown I add up all the distances to find the total distance of an ambulation
+				/*else {
+					totalDist += cumulativedistance[z];
+				}*/
+				// was not able to check if this would work
 			}
-
+			
+			//part of distance categorization NEEDS TESTING
+			/*
+			//the three distances in PositivePatterns which has 905, 463, 257
+			if(totalDist <= PositivePatterns[2]) { //if it is smaller than all 3 it is given a false boolean
+				ambulationPatterns[ambulationcount] = false;
+			}
+			else if (totalDist <= PositivePatterns[0] && totalDist >= PositivePatterns[1] && (totalDist - 100) <= PositivePatterns[1]) { 
+			// if its bigger then 463 but smaller than 905 its true
+			// i add the third condition so that values closer to 905 such as 800 will not be true
+				ambulationPatterns[ambulationcount] = true;
+			}
+			else if (totalDist <= PositivePatterns[1] && totalDist >= PositivePatterns[2] && (totalDist - 100) <= PositivePatterns[2]) { 
+			//same concept as above, if bigger than 257 and smaller then 463
+				ambulationPatterns[ambulationcount] = true;
+			}
+			else if (totalDist >= PositivePatterns[0]) { // if greater than 905
+				ambulationPatterns[ambulationcount] = true;
+			}
+			else {
+				ambulationPatterns[ambulationcount] = false;
+			}
+			*/
+			
 
 			int ind = 1;
 			double sum = 0;
@@ -840,11 +889,12 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 					}
 
-					/*else {
+					else {
 					
-					
+						path.push_back(0);
+						return;
 										
-					}*/
+					}
 
 				
 
@@ -918,9 +968,10 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 						
 					}
 
-					/*else { //it found nothing. I'm saying if it doesn't find any missingsensors that means that path is too far too connect or missingsensorcheck isn't big enough.
-						
-					}*/
+					else { //it found nothing. I'm saying if it doesn't find any missingsensors that means that path is too far too connect or missingsensorcheck isn't big enough.
+						path.push_back(0);
+						return;
+					}
 		
 		
 				present:
