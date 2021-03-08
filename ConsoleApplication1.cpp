@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+﻿
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -9,7 +9,7 @@
 #include <thread>
 #include <chrono>
 #include <cstdlib>
-#include "CSVRow.h"
+
 #include "Definements.h"
 #include "Node.h"
 #include "Reverse.h"
