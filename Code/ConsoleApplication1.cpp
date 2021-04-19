@@ -20,6 +20,7 @@
 #include <Windows.h> 
 #include <Wininet.h>
 #include <filesystem>
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 #include <tchar.h>
 #include <urlmon.h>
@@ -28,6 +29,8 @@
 #include <utility>
 #include "ConsoleApplication1.h"
 #include <unordered_set>
+
+
 
 
 
@@ -48,7 +51,7 @@ vector<double> shortestpath; //used in missingsensorpresentfunction.
 //map<int,boolean> ambulationPatterns;
 
 //list of variables the can be chenged in code:
-string floorname = "Floor9.txt";
+string floorname = "Floor10.txt";
 int length = 6; //how many sensors constitutes a path
 int ambulationtime = 3601; //how long an ambulation should be. seconds
 int rexit = 60; //if doesn't exit room after 60 seconds mark as new ambulation.
@@ -94,6 +97,9 @@ int main() {
 
 	//idata input
 	while (idata >> row) {
+		//for (int i = 0; i < 4; i++)
+			//cout << row[i] << endl;
+		//cout << row[0] << endl;
 		vector<string> line;
 		if (row[0].empty()) {
 			cout << "IData file is empty" << endl;
@@ -170,13 +176,15 @@ int main() {
 						else if (comp <= 0) {
 							passed = true;
 						}
+						//cout << "passed: " << passed << endl;
 						if (passed) // End date functionality added 
 						{
-							cout << buffer.str() << endl;
+							//cout << "TRACK_LOG_FILE_NAME: " << buffer.str() << endl;
 							temp = ambulations(buffer.str(), patientID[i], segData, Floormap, roomlist); 
 							
 							//ambulations: all the ambulations for a given day
 							buffer.str(""); //empties buffer
+							//cout << "temp.size() = " << temp.size() << endl;
 							for (int i = 0; i < temp.size(); i++)
 							{
 								livedata.push_back(temp[i]);
@@ -202,8 +210,13 @@ int main() {
 	ofstream output;
 	
 	output.open("live.csv");
+
+	//cout << "livedata.size() = " << livedata.size() << endl;
 	for (int i = 0; i < livedata.size(); i++)
 	{
+
+		//cout << "in for loop" << endl;
+
 		if (i > 0 && livedata[i][0] != livedata[i - 1][0]) {
 			output << endl;
 		}
@@ -246,7 +259,7 @@ int main() {
 		
 
 		
-	cout << "Scan Complete!" << endl;
+	//cout << "Scan Complete!" << endl;
 		
 	
 	//}
@@ -325,6 +338,12 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 //takes in the sensors data file for a given date, the data of the patients from the idata file, and calcualtes how many ambulations occur on the given date for the patient
 	vector<vector<string>> ambulations(string tracklogfile, string patient, vector<vector<string>>& segments, unordered_map<int, Node> floor, map<pair<string, int>, vector<int>> roomlist) {
+
+		//cout << "TRACKLOGFILE: " << tracklogfile << endl;
+
+		cout << "PATIENT: " << patient << endl << "SEGMENTS: " << segments.size() << endl << "FLOOR " << floor.size() << endl;
+
+
 		vector<vector<string>> output;
 		output.clear();
 		ifstream tracklog(tracklogfile);
@@ -338,8 +357,11 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		
 		//turns times to seconds and stores them.
 		while (tracklog >> row) {
+			//cout << "FOUND ELEMENT" << endl;
 			sensorID.push_back(stoi(row[5]));
 			temptime = stoi(row[7].substr(11, 2)) * 3600 + stoi(row[7].substr(14, 2)) * 60 + stoi(row[7].substr(17));
+			//cout << "temptime = " << temptime << endl;
+
 			starttime.push_back(temptime);
 			temptime = 0;
 			temptime = stoi(row[8].substr(11, 2)) * 3600 + stoi(row[8].substr(14, 2)) * 60 + stoi(row[8].substr(17));
@@ -350,13 +372,18 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		map<int, int> roomfinder;
 		roomfinder.clear();
 
+		//cout << "INTERMEDIATE SENSORID.size: " << sensorID.size() << "; starttime.size: " << starttime.size() << endl;
 		
 		//this is to get rid of any sensors that are not for this floor present in the tracklog file. For now till I found a better way to deal with non paitentroom room sensors.
 		
+		//cout << "ROOMLIST LENGTH: " << roomlist.size() << endl;
+		//cout << "SENSORID.SIZE(): " << sensorID.size() << endl;
 		for (int i = 0; i < sensorID.size();i++) {
 			bool found = false;
 			if (floor.count(sensorID[i]) == 0) {
+				cout << sensorID[i] << endl;
 				for (map<pair<string, int>, vector<int>>::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
+					//cout << it->first.second << endl;
 					if (it->first.second == sensorID[i]) {
 						roomfinder[it->first.second]++; //determines which room was detected the most.
 						found = true;
@@ -377,12 +404,14 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		}
 
 		//if 2 sensors or less are left that are of the floor.
-
+		//cout << "BEFORE FIRST RETURN OUTPUT" << endl;
+		//cout << "sensorID.size() = " << sensorID.size() << "; starttime.size() = " << starttime.size() << endl;
 		if (sensorID.size() < 3 || starttime.size() < 3) {
+			//cout << "RETURNING" << endl;
 			return output;
 		}
 
-
+		//cout << "MOVING ON" << endl << endl << endl;
 
 
 		int roomcounter = 0;
@@ -443,7 +472,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			
 		}
 
-
+		//cout << "NEXT 1" << endl;
 
 
 		//creates several possible ambualtions to be checked for missing sensors and if longer than length sensors.
@@ -531,6 +560,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				///////////////////////////////////////////////////////////////
 				*/
 
+				//cout << "NEXT 2" << endl;
+
 
 				ambulation[ambulationcount].push_back(sensorID[start]);
 				ambulation_starttimes[ambulationcount].push_back(starttime[start]);
@@ -589,7 +620,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		}
 		
 
-		
+		//cout << "NEXT 3" << endl;
 
 		string roomID;
 		for (map<pair<string, int>, vector<int>>::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
@@ -599,7 +630,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			}
 		}
 
-		
+		//cout << "NEXT 3.1" << endl;
 		vector<int> missingsensors;
 		vector<int> path;
 		vector<double> cumulativedistance;
@@ -607,11 +638,14 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		vector<double> storespeed;
 
 		vector<string> temp;
-		string date = tracklogfile.substr(59, 10);
-		string number = tracklogfile.substr(70, 6);
+		//string date = tracklogfile.substr(59, 10);
+		int start_index = tracklogfile.rfind("\\");
+		string date = tracklogfile.substr(start_index + 1, 10);
+		//string number = tracklogfile.substr(70, 6);
+		string number = tracklogfile.substr(9, 6);
 		
 		//runs sensorcheck on each ambulation remaining and puts result in segment variable to be outputted later.
-
+		//cout << "NEXT 3.25" << endl;
 		for (int i = 0; i < ambulationcount; i++) {
 			bool failed = false;
 
@@ -621,12 +655,16 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			missingsensors.clear();
 			path.clear();
 			cumulativedistance.clear();
-
+			//cout << "NEXT 3.5" << endl;
+			for(auto u : sensorID)
+				cout << u << endl;
 			sensorcheck(cumulativedistance, missingsensors, path, ambulation[i], floor, 0, roomlist); //can use it to account for if 6 sensors were passed and for trajectory. But sensorID needs to be sorted before passing into here. Maybe on the basis of time. Need to determine which paths are worth checking and then call once for each path.
-			
+			//cout << "NEXT 3.6" << endl;
 			///////////////added this condiiton but hasn't been triggered yet. If any problems comment out.
 			if (path[path.size() - 1] == 0) {
+				cout << "NEXT 3.7" << endl;
 				for (int j = 0; j < ambulation[i].size(); j++) {
+					cout << "NEXT 3.8" << endl;
 					temp.push_back(to_string(ambulation[i][j]));
 				}
 				temp.push_back("Path could not be completed;A next Sensor was not found"); //either not a path or missing_sensor_check needs to be increased.
@@ -635,7 +673,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				continue;
 			}
 			/////////////
-
+			cout << "NEXT 3.9" << endl;
 			if (path.size() < length) {
 				failed = true;
 			}
@@ -653,6 +691,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				}*/
 				// was not able to check if this would work
 			}
+
+			cout << "NEXT 3.10" << endl;
 			
 			//part of distance categorization NEEDS TESTING
 			/*
@@ -692,30 +732,47 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				temp.push_back(number);
 				temp.push_back(roomID); 
 				temp.push_back(to_string(path[k]));
+
+				cout << "NEXT 3.11" << endl;
+
 				if (ind < ambulation[i].size() && path[k] == ambulation[i][ind]) { //ind because i'm not including room sensor. and path is larger.
 					int hours = ambulation_starttimes[i][ind - 1] / 3600 % 60;
 					int min = ambulation_starttimes[i][ind -1] / 60 % 60;
 					int sec = ambulation_starttimes[i][ind - 1] % 60;
+
+					cout << "NEXT 3.12" << endl;
+
 					string formattime = to_string(hours) + ":" + to_string(min) + ":" + to_string(sec);
 					temp.push_back(formattime); //push back the actual time.
 					time =  ambulation_starttimes[i][ind - 1] - ambulation_starttimes[i][0]; //use the cumulative time.
 						temp.push_back(to_string(time)); //current time in seconds. subtracted from starting time.
-						
+						cout << "NEXT 3.125" << endl;
+
+						//ADDED BY RYAN
+						//prevent index out of range error
+						if (ind > 1 )
+						//END OF ADDED BY RYAN
+
 							speedtime = ambulation_starttimes[i][ind - 1] - ambulation_starttimes[i][ind - 2]; // this is the time to use for the segspeed for now.
-						
+							cout << "NEXT 3.128" << endl;
 						ind++;
 						
 				}
 					
 				else {
+					cout << "NEXT 3.13" << endl;
 					temp.push_back("Missed Sensor 00:00:00");
 						temp.push_back(to_string(time)); 
 						missed = true;
 					
 				}
 
-				if (k <= cumulativedistance.size() && k > 0) { //double check the = I put here.
-					
+				cout << "k = " << k << endl;
+
+				cout << "cumulativedistance.size() = " << cumulativedistance.size() << endl;
+
+				//if (k <= cumulativedistance.size() && k > 0) { //double check the = I put here.
+				if (k < cumulativedistance.size() && k > 0) {
 					sum += cumulativedistance[k - 1];
 					temp.push_back(to_string(sum));
 					
@@ -754,7 +811,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			}
 			
 
-
+			cout << "NEXT 4" << endl;
 
 			temp.clear();
 
@@ -796,7 +853,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			
 		}
 
-
+		cout << "output.size() = " << output.size() << endl;
 		
 		return output;
 	}
@@ -817,9 +874,10 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 		if (i + 1 == sensorID.size()) {
 			//path.push_back(sensorID[i]);
+			cout << "BASE CASE" << endl;
 			return;
 		}
-
+		cout << "SENSORCHECK 1" << endl;
 		unordered_map<int, Node>::iterator it = floor.find(sensorID[i]);
 
 		
@@ -830,7 +888,9 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 
 			
 				for (int p = 0; p < it->second.get_adjacent().size(); p++) {
+					cout << "SENSORCHECK 2" << endl;
 					if (sensorID[i] == it->second.get_adjacent()[p]) {
+						cout << "SENSORCHECK 3" << endl;
 						path.push_back(sensorID[i + 1]); //dont want to add the ending room sensor.
 						goto present;
 					}
@@ -843,8 +903,12 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 					shortestpath.clear();
 					visited2.push_back(it->first);
 					counter = 0;
+
+					cout << "SENSORCHECK 4" << endl;
+
 					missingsensorpresent(it->second, sensors, path, cumulativedistance, sensorID[i], 0, floor, visited2); //this needs to be altered and intertwined with general djistrikas
 
+					cout << "SENSORCHECK 5" << endl;
 
 					if (counter > 0) {
 
