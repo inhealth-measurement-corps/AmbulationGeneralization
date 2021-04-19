@@ -1,6 +1,5 @@
-﻿#include <iostream>
-#include "filesystem.hpp"
-#include "stdafx.h"
+﻿#include "stdafx.h"
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include <algorithm>
@@ -18,26 +17,16 @@
 #include "dijkstras2.h"
 #include "smart_ptr.h"
 #include "targetver.h"
-//#include <Windows.h> 
-//#include <Wininet.h>
-
-
-
-//#include <tchar.h>
-//#include <urlmon.h>
-
-using namespace std;
-
-
-
-
-
-
+#include <Windows.h> 
+#include <Wininet.h>
+#include <filesystem>
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem>
+#include <tchar.h>
+#include <urlmon.h>
 #include <ctime>
 #include <unordered_map>
 #include <utility>
-#include <filesystem>
-namespace fs = std::filesystem;
 #include "ConsoleApplication1.h"
 #include <unordered_set>
 
@@ -52,8 +41,8 @@ namespace fs = std::filesystem;
 using namespace std;
 
 //Global variables
-map<int,vector<int> > tracksensors; //used in missingsensorspresent function.
-map<int,vector<double> > trackdistance; //used in missingsensorspresent function.
+map<int,vector<int>> tracksensors; //used in missingsensorspresent function.
+map<int,vector<double>> trackdistance; //used in missingsensorspresent function.
 int counter = 0; //used in missingsensorpresent function.
 vector<double> shortestpath; //used in missingsensorpresentfunction.
 
@@ -87,13 +76,13 @@ int main() {
 	//ConnectServer connect;
 	//econnect.insert(1, 10, "2018-11-15 23:45:30", 200, 12, 2, 1, 1, 0, "0", "2018-10-13 11:10:10");
 
-	vector<vector<string> > patients; //each line of idata file
+	vector<vector<string>> patients; //each line of idata file
 	CSVRow row;
 
 	//additional file input to create nodes of the floor sensors in the hallway.
 	//Right now this being built specifically for use of text file but can be changed.
 
-	map<pair<string, int>, vector<int> > roomlist; //the pair key is the Room number and room sensor. The key of the map allows access to the hallway sensor nearest that room. 
+	map<pair<string, int>, vector<int>> roomlist; //the pair key is the Room number and room sensor. The key of the map allows access to the hallway sensor nearest that room. 
 	unordered_map<int, Node> Floormap = create_nodes(roomlist);
 
 
@@ -156,13 +145,13 @@ int main() {
 
 	//using the path in order to go through the tracklog files
 	stringstream buffer;
-	vector<vector<string> > segData;
-	vector<vector<string> > livedata; //holds the rows of info spit out every time from temp. The thing is it stores all info for all patients given in idata file. then you need to sort it.
-	vector<vector<string> > temp; //each vector here is a row of information for each ambulation on a given day. So 2 ambulations = temp size 2
+	vector<vector<string>> segData;
+	vector<vector<string>> livedata; //holds the rows of info spit out every time from temp. The thing is it stores all info for all patients given in idata file. then you need to sort it.
+	vector<vector<string>> temp; //each vector here is a row of information for each ambulation on a given day. So 2 ambulations = temp size 2
 	
 	//goes through the directories and tracklog files
 
-	for (auto& p : fs::recursive_directory_iterator(path)) {
+	for (auto& p : experimental::filesystem::recursive_directory_iterator(path)) {
 		buffer << p;
 		int OPP = buffer.str().find('-') - 4; //Holds integer value of parent directory path
 		//series of filters to check whether or not to scan analyze a file by checking name, start date, and end date of file
@@ -269,7 +258,7 @@ int main() {
 
 //map key is the sensorID and the key's value is the node corresponding to that sensor.
 //list is a list of all the room sensors with all the nearby hallway sensors. Pair<Romm#, sensorID>,<closest hallway sensors>
-unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list) {
+unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list) {
 	unordered_map<int, Node> result;
 	ifstream input(floorname);
 	double has_next; //to check if there is input left in the file
@@ -337,8 +326,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 }
 
 //takes in the sensors data file for a given date, the data of the patients from the idata file, and calcualtes how many ambulations occur on the given date for the patient
-	vector<vector<string> > ambulations(string tracklogfile, string patient, vector<vector<string> >& segments, unordered_map<int, Node> floor, map<pair<string, int>, vector<int> > roomlist) {
-		vector<vector<string> > output;
+	vector<vector<string>> ambulations(string tracklogfile, string patient, vector<vector<string>>& segments, unordered_map<int, Node> floor, map<pair<string, int>, vector<int>> roomlist) {
+		vector<vector<string>> output;
 		output.clear();
 		ifstream tracklog(tracklogfile);
 		CSVRow row;
@@ -369,7 +358,9 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 		for (int i = 0; i < sensorID.size();i++) {
 			bool found = false;
 			if (floor.count(sensorID[i]) == 0) {
-				for (map<pair<string, int>, vector<int> >::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
+				for (map<pair<string, int>, vector<int>>::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
+					
+					
 					if (it->first.second == sensorID[i]) {
 						roomfinder[it->first.second]++; //determines which room was detected the most.
 						found = true;
@@ -408,7 +399,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 
 
 		//file sensors sorting so that I can pass it into sensor check
-		map<int,vector<int> > ambulation; //the map to hold the sorted data that will be checked for 6 sensors and missing sensors using sensorcheck.
+		map<int,vector<int>> ambulation; //the map to hold the sorted data that will be checked for 6 sensors and missing sensors using sensorcheck.
 		int start = 0;
 		int index = 0; // to keep track of where we started
 		int ambulationcount = 0;
@@ -438,7 +429,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 
 		vector<int> hallway_sensors;
 		if (patientroom != 0) {
-			for (map<pair<string, int>, vector<int> >::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
+			for (map<pair<string, int>, vector<int>>::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
 				if (it->first.second == patientroom) {
 					hallway_sensors = it->second;
 					break;
@@ -462,10 +453,10 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 		//creates several possible ambualtions to be checked for missing sensors and if longer than length sensors.
 
 		 
-		map<int,vector<int> > ambulation_starttimes;
-		map<int, vector<int> > ambulation_endtimes;
-		map<int, vector<int> > OOR;
-		map<int, vector<int> > OORstimes;
+		map<int,vector<int>> ambulation_starttimes;
+		map<int, vector<int>> ambulation_endtimes;
+		map<int, vector<int>> OOR;
+		map<int, vector<int>> OORstimes;
 		int OORcount = 0;
 
 		int time_room_to_hallway = 0;
@@ -601,7 +592,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 		
 
 		string roomID;
-		for (map<pair<string, int>, vector<int> >::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
+		for (map<pair<string, int>, vector<int>>::iterator it = roomlist.begin(); it != roomlist.end(); ++it) {
 			if (it->first.second == patientroom) {
 				roomID = it->first.first;
 				break;
@@ -813,7 +804,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 
 	//checks for next sensor along the path recursively. Doesn't find it means missing sensor and goes to missingsensorpresent. 
 
-	void sensorcheck(vector<double>& cumulativedistance, vector<int>& sensors, vector<int>& path, vector<int> sensorID, unordered_map<int, Node> floor, int index, map<pair<string, int>, vector<int> > roomlist) {
+	void sensorcheck(vector<double>& cumulativedistance, vector<int>& sensors, vector<int>& path, vector<int> sensorID, unordered_map<int, Node> floor, int index, map<pair<string, int>, vector<int>> roomlist) {
 
 		vector<int> visited2;
 		
@@ -906,7 +897,6 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 
 				goto present;
 			
-
 
 		}
 
@@ -1060,3 +1050,22 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int> >& list
 				}
 
 	}
+
+
+	//give recommendations to users
+	//if a patient did not meet their goal
+	//vector<vector<string>> patients;
+
+	//what are recommendations based out of?
+	bool check_recommendation (Patient patient) {
+		if (patient.steps < patient.goal_placeholder) {
+			//patient did not meet goal
+			return false;
+		}
+
+		if (patient.distance < goal_distance) {
+
+		}
+
+
+	})
