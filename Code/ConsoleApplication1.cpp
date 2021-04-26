@@ -1057,6 +1057,8 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 	//vector<vector<string>> patients;
 
 	//what are recommendations based out of?
+	//patient recommendation - customization
+	
 	bool check_recommendation (Patient patient) {
 		if (patient.steps < patient.goal_placeholder) {
 			//patient did not meet goal
@@ -1066,6 +1068,27 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		if (patient.distance < goal_distance) {
 
 		}
+	}
 
 
-	})
+	//if there is a big increase in speed from one moment to another, a patient is most likely on a wheelchair
+	//assuming that patient moves faster in a wheelchair
+	void markAmbulation(vector<double> storespeed) {
+		double const marginOfSpeed = 10.0; //what counts as a signficant change?
+
+		for (int i = 0; i < storespeed.size(); ++i) {
+			for (int j = i; j < storespeed.size(); ++j ) {
+				double currentSpeed = storespeed.get(i);
+				double nextSpeed = storespeed.get(j);
+
+				//there has been a major change in speed for a patient
+				if (abs(currentSpeed - nextSpeed) > 10.0) {
+					return false;
+				}
+
+			}
+		}
+		return true;
+	}
+
+
