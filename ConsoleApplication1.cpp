@@ -47,8 +47,8 @@ int counter = 0; //used in missingsensorpresent function.
 vector<double> shortestpath; //used in missingsensorpresentfunction.
 
 //following 2 variables are used for distance categorization in ambulations function.
-//vector<double> positivePatterns (905, 463, 257);
-//map<int,boolean> ambulationPatterns;
+vector<double> positivePatterns (905, 463, 257);
+map<int,boolean> ambulationPatterns;
 
 //list of variables the can be chenged in code:
 string floorname = "Floor10.txt";
@@ -202,7 +202,15 @@ int main() {
 	}
 
 	//output://delete this when doing more than one file
-
+	/* testing outut of distance categorization 
+	cout << "testing distance!" << endl;
+	std::map<int, bool>::iterator it = ambulationPatterns.begin();
+	for (it = ambulationPatterns.begin(); it != ambulationPatterns.end(); ++it)
+	{
+		cout << it->first << " " << std::boolalpha << it->second << "\n";
+	}*/
+	
+	//patientLeavingUnit(27, 38, 39, temp);
 	
 	sort(livedata.begin(), livedata.end(), sortcol); //sorts by date
 
@@ -266,6 +274,39 @@ int main() {
 	//}
 	
 	return 0;
+}
+
+void patientLeavingUnit(string exitSensorNumA, string exitSensorNumB, string exitSensorNumC,  vector<vector<string> > temp) {
+	int exitIndex = -1;
+	for (int i = 0; i < temp.size() - 2; i++) {
+		if (temp[i][3]._Equal(exitSensorNumA) && temp[i + 1][3]._Equal(exitSensorNumB) && temp[i + 2][3]._Equal(exitSensorNumC)) {
+			//this if statement checks to see if a patient on an ambulation exits the unit and 
+			// we check two sensors to confirm they pass the sensor in front and outside of the exit
+			exitIndex = i;
+			break;
+		}
+	}
+	if (exitIndex == -1) { // this means the patient never left the unit
+		return;
+	}
+	int rentryIndex = -1;
+	for (int i = exitIndex; i < temp.size() - 2; i++) {
+		if (temp[i][3]._Equal(exitSensorNumA) && temp[i + 1][3]._Equal(exitSensorNumB) && temp[i + 2][3]._Equal(exitSensorNumC)) {
+			//this if statement checks to see if a patient on an ambulation exits the unit and 
+			// we check two sensors to confirm they pass the sensor in front and outside of the exit
+			int rentryIndex = i;
+			break;
+		}
+	}
+	if (rentryIndex == -1) { // this is something we will have to address later this
+	// there is a special case where the patient can leave the unit but on the offchance does not pass either of the two sensors
+	// when returning we won't know they came back into the unit which means we will not edit the ambulation when we really should
+		return;
+	}
+	for (int j = exitIndex; j < rentryIndex; j++) {
+		// remove all the times and distances   
+	}
+	return;
 }
 
 //map key is the sensorID and the key's value is the node corresponding to that sensor.
@@ -679,7 +720,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				failed = true;
 			}
 			//make a new variable
-			//double totalDist = 0;
+			double totalDist = 0;
 			for (int z = 0; z < cumulativedistance.size(); z++) {
 				if (cumulativedistance[z] == 0.1) { //means room sensor distance meant to be thrown. 
 					cumulativedistance.erase(cumulativedistance.begin() + z);
@@ -687,36 +728,38 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				}
 				//part of distance categorization NEEDS TESTING
 				// if its not meant to be thrown I add up all the distances to find the total distance of an ambulation
-				/*else {
+				else {
 					totalDist += cumulativedistance[z];
-				}*/
+				}
 				// was not able to check if this would work
 			}
 
 			cout << "NEXT 3.10" << endl;
 			
-			//part of distance categorization NEEDS TESTING
-			/*
+			//part of distance categorization NEEDS more debugging
+			positivePatterns.push_back(905);
+			positivePatterns.push_back(463);
+			positivePatterns.push_back(257);
+			
 			//the three distances in PositivePatterns which has 905, 463, 257
-			if(totalDist <= PositivePatterns[2]) { //if it is smaller than all 3 it is given a false boolean
-				ambulationPatterns[ambulationcount] = false;
+			if(totalDist <= positivePatterns[2]) { //if it is smaller than all 3 it is given a false 
+				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount,false));
 			}
-			else if (totalDist <= PositivePatterns[0] && totalDist >= PositivePatterns[1] && (totalDist - 100) <= PositivePatterns[1]) { 
+			else if (totalDist <= positivePatterns[0] && totalDist >= positivePatterns[1] && (totalDist - 100) <= positivePatterns[1]) {
 			// if its bigger then 463 but smaller than 905 its true
 			// i add the third condition so that values closer to 905 such as 800 will not be true
-				ambulationPatterns[ambulationcount] = true;
+				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount, true));
 			}
-			else if (totalDist <= PositivePatterns[1] && totalDist >= PositivePatterns[2] && (totalDist - 100) <= PositivePatterns[2]) { 
+			else if (totalDist <= positivePatterns[1] && totalDist >= positivePatterns[2] && (totalDist - 100) <= positivePatterns[2]) {
 			//same concept as above, if bigger than 257 and smaller then 463
-				ambulationPatterns[ambulationcount] = true;
+				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount, true));
 			}
-			else if (totalDist >= PositivePatterns[0]) { // if greater than 905
-				ambulationPatterns[ambulationcount] = true;
-			}
+			/*else if (totalDist >= positivePatterns[0]) { // if greater than 905
+				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount, true));
+			}*/
 			else {
-				ambulationPatterns[ambulationcount] = false;
+				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount, false));
 			}
-			*/
 			
 
 			int ind = 1;
