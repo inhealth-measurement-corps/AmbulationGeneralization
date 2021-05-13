@@ -29,6 +29,7 @@
 #include <utility>
 #include "ConsoleApplication1.h"
 #include <unordered_set>
+#include <deque>
 
 
 
@@ -47,8 +48,8 @@ int counter = 0; //used in missingsensorpresent function.
 vector<double> shortestpath; //used in missingsensorpresentfunction.
 
 //following 2 variables are used for distance categorization in ambulations function.
-vector<double> positivePatterns (905, 463, 257);
-map<int,boolean> ambulationPatterns;
+//vector<double> positivePatterns (905, 463, 257);
+//map<int,boolean> ambulationPatterns;
 
 //list of variables the can be chenged in code:
 string floorname = "Floor10.txt";
@@ -112,7 +113,6 @@ int main() {
 		patients.push_back(line);
 	}
 	idata.close();
-	//return 0;
 	sort(patients.begin(), patients.end(), sortcol);
 
 	//Determines the dates that calculations will be done for.
@@ -202,15 +202,7 @@ int main() {
 	}
 
 	//output://delete this when doing more than one file
-	/* testing outut of distance categorization 
-	cout << "testing distance!" << endl;
-	std::map<int, bool>::iterator it = ambulationPatterns.begin();
-	for (it = ambulationPatterns.begin(); it != ambulationPatterns.end(); ++it)
-	{
-		cout << it->first << " " << std::boolalpha << it->second << "\n";
-	}*/
-	
-	//patientLeavingUnit(27, 38, 39, temp);
+
 	
 	sort(livedata.begin(), livedata.end(), sortcol); //sorts by date
 
@@ -226,9 +218,9 @@ int main() {
 
 		//cout << "in for loop" << endl;
 
-		if (i > 0 && livedata[i][0] != livedata[i - 1][0]) {
-			output << endl;
-		}
+		//if (i > 0 && livedata[i][0] != livedata[i - 1][0]) {
+			//output << endl;
+		//}
 
 		for (int j = 0; j < livedata[i].size(); ++j)
 		{
@@ -268,7 +260,7 @@ int main() {
 		
 
 		
-	//cout << "Scan Complete!" << endl;
+	cout << "Scan Complete!" << endl;
 		
 	
 	//}
@@ -276,37 +268,70 @@ int main() {
 	return 0;
 }
 
-void patientLeavingUnit(string exitSensorNumA, string exitSensorNumB, string exitSensorNumC,  vector<vector<string> > temp) {
-	int exitIndex = -1;
-	for (int i = 0; i < temp.size() - 2; i++) {
-		if (temp[i][3]._Equal(exitSensorNumA) && temp[i + 1][3]._Equal(exitSensorNumB) && temp[i + 2][3]._Equal(exitSensorNumC)) {
-			//this if statement checks to see if a patient on an ambulation exits the unit and 
-			// we check two sensors to confirm they pass the sensor in front and outside of the exit
-			exitIndex = i;
-			break;
+
+
+void short_bfs(unordered_map<int, Node> graph, deque<pair<pair<int, Node>, int>>& queue, unordered_set<Node>& visited,
+	unordered_map<int, double>& edges, unordered_map<int, int>& depths) {
+
+	//pair in new_edges vector is (path length, depth); int in outer pair is sensor ID
+	//int in pair in deque is depth of Node
+
+	pair<pair<int, Node>, int> next_pair = queue.front();
+	int next_ID = next_pair.first.first;
+	Node next = next_pair.first.second;
+	int depth = next_pair.second;
+	queue.pop_front();
+	visited.insert(next);
+
+	vector<int> neighborIDs = next.get_adjacent();
+	vector<double> neighbor_lengths = next.get_distance();
+	for (int i = 0; i < neighborIDs.size(); i++) {
+		int ID = neighborIDs[i];
+		Node neighbor = graph[ID];
+		if (!visited.count(neighbor)) {
+			queue.push_back(make_pair(make_pair(ID, neighbor), depth+1));
+
+			//if have path of same depth, but longer, or is missing path, add/replace this edge
+			if (edges.count(ID) == 0 || (depths[ID] == depth + 1 && (edges[next_ID] + neighbor_lengths[ID] < edges[ID]))) {
+				edges[ID] = edges[next_ID] + neighbor_lengths[ID];
+				//only necessary if the first clause was true, but doesn't change anything if not
+				depths[ID] = depth + 1;
+			}
 		}
 	}
-	if (exitIndex == -1) { // this means the patient never left the unit
-		return;
+
+	if (!queue.empty()) {
+
+		short_bfs(graph, queue, visited, edges, depths);
+
 	}
-	int rentryIndex = -1;
-	for (int i = exitIndex; i < temp.size() - 2; i++) {
-		if (temp[i][3]._Equal(exitSensorNumA) && temp[i + 1][3]._Equal(exitSensorNumB) && temp[i + 2][3]._Equal(exitSensorNumC)) {
-			//this if statement checks to see if a patient on an ambulation exits the unit and 
-			// we check two sensors to confirm they pass the sensor in front and outside of the exit
-			int rentryIndex = i;
-			break;
+	
+}
+
+//make the graph more robust to missing sensors--make it a complete graph;
+//add edges between nonadjacent nodes with distances equal to the length of
+//the shortest fewest-sensor path between them (meaning that this was the most
+//likely path taken (aside from other paths that skip the same number of sensors),
+//since we assume that sensors are rarely skipped)
+void completify(unordered_map<int, Node> graph) {
+
+	//for each vertex, add edges to everything it's connected to
+	deque<pair<pair<int, Node>, int>> queue;
+	for (pair<int, Node> sensor : graph) {
+		queue.push_back(make_pair(sensor, 0));
+		unordered_set<Node> visited;
+		unordered_map<int, double> edges;
+		unordered_map<int, int> depths;
+		short_bfs(graph, queue, visited, edges, depths);
+
+		for (pair<int, double> edge : edges) {
+			//add the new edges
+			sensor.second.set_adjacent(edge.first, edge.second);
 		}
+
 	}
-	if (rentryIndex == -1) { // this is something we will have to address later this
-	// there is a special case where the patient can leave the unit but on the offchance does not pass either of the two sensors
-	// when returning we won't know they came back into the unit which means we will not edit the ambulation when we really should
-		return;
-	}
-	for (int j = exitIndex; j < rentryIndex; j++) {
-		// remove all the times and distances   
-	}
-	return;
+
+
 }
 
 //map key is the sensorID and the key's value is the node corresponding to that sensor.
@@ -332,6 +357,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 			input.putback(c);
 			if (result.count(sensorID) > 0) {
 				result[sensorID].set_adjacent(adjacent, distance);
+				//this seems suspicious...
 				goto makeroomlist;
 			}
 			result[sensorID] = Node(adjacent, distance);
@@ -373,7 +399,13 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 		
 	}
 	
-	close:
+close:
+
+	//make the graph more robust to missing sensors
+	completify(result);
+
+
+
 	input.close();
 	return result;
 }
@@ -720,7 +752,7 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				failed = true;
 			}
 			//make a new variable
-			double totalDist = 0;
+			//double totalDist = 0;
 			for (int z = 0; z < cumulativedistance.size(); z++) {
 				if (cumulativedistance[z] == 0.1) { //means room sensor distance meant to be thrown. 
 					cumulativedistance.erase(cumulativedistance.begin() + z);
@@ -728,38 +760,36 @@ unordered_map<int, Node> create_nodes(map<pair<string, int>, vector<int>>& list)
 				}
 				//part of distance categorization NEEDS TESTING
 				// if its not meant to be thrown I add up all the distances to find the total distance of an ambulation
-				else {
+				/*else {
 					totalDist += cumulativedistance[z];
-				}
+				}*/
 				// was not able to check if this would work
 			}
 
 			cout << "NEXT 3.10" << endl;
 			
-			//part of distance categorization NEEDS more debugging
-			positivePatterns.push_back(905);
-			positivePatterns.push_back(463);
-			positivePatterns.push_back(257);
-			
+			//part of distance categorization NEEDS TESTING
+			/*
 			//the three distances in PositivePatterns which has 905, 463, 257
-			if(totalDist <= positivePatterns[2]) { //if it is smaller than all 3 it is given a false 
-				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount,false));
+			if(totalDist <= PositivePatterns[2]) { //if it is smaller than all 3 it is given a false boolean
+				ambulationPatterns[ambulationcount] = false;
 			}
-			else if (totalDist <= positivePatterns[0] && totalDist >= positivePatterns[1] && (totalDist - 100) <= positivePatterns[1]) {
+			else if (totalDist <= PositivePatterns[0] && totalDist >= PositivePatterns[1] && (totalDist - 100) <= PositivePatterns[1]) { 
 			// if its bigger then 463 but smaller than 905 its true
 			// i add the third condition so that values closer to 905 such as 800 will not be true
-				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount, true));
+				ambulationPatterns[ambulationcount] = true;
 			}
-			else if (totalDist <= positivePatterns[1] && totalDist >= positivePatterns[2] && (totalDist - 100) <= positivePatterns[2]) {
+			else if (totalDist <= PositivePatterns[1] && totalDist >= PositivePatterns[2] && (totalDist - 100) <= PositivePatterns[2]) { 
 			//same concept as above, if bigger than 257 and smaller then 463
-				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount, true));
+				ambulationPatterns[ambulationcount] = true;
 			}
-			/*else if (totalDist >= positivePatterns[0]) { // if greater than 905
-				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount, true));
-			}*/
+			else if (totalDist >= PositivePatterns[0]) { // if greater than 905
+				ambulationPatterns[ambulationcount] = true;
+			}
 			else {
-				ambulationPatterns.insert(std::pair<int, bool>(ambulationcount, false));
+				ambulationPatterns[ambulationcount] = false;
 			}
+			*/
 			
 
 			int ind = 1;
